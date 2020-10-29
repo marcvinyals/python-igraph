@@ -11750,10 +11750,11 @@ PyObject *igraphmodule_Graph_community_leiden(igraphmodule_GraphObject *self,
     free(membership);
   }
 
-  if (!error)
-  {  return res; }
-  else
-  {  return NULL; }
+  if (!error) {
+    return Py_BuildValue("Nd", res, (double)quality);
+  } else {
+    return NULL;
+  }
 }
 
 /**********************************************************************
@@ -15757,6 +15758,8 @@ struct PyMethodDef igraphmodule_Graph_methods[] = {
    "       provided, the aglorithm simply starts from the singleton partition.\n"
    "     @param n_iterations: the number of iterations to iterate the Leiden\n"
    "       algorithm. Each iteration may improve the partition further.\n"
+   "     @return: the calculated membership vector and the corresponding\n"
+   "       partition quality in a tuple.\n"
    "     @return: the community membership vector.\n"
   },
   {"community_walktrap",

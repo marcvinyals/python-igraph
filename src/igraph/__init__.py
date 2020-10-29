@@ -1498,7 +1498,9 @@ class Graph(GraphBase):
           If this is not provided, it will be automatically determined on the
           basis of whether you want to use CPM or modularity. If you do provide
           this, please make sure that you understand what you are doing.
-        @return: an appropriate L{VertexClustering} object.
+        @return: an appropriate L{VertexClustering} object with an extra
+          attribute called C{quality} that stores the value of the objective
+          function optimized by the algorithm.
 
         @newfield ref: Reference
         @ref: Traag, V. A., Waltman, L., & van Eck, N. J. (2019). From Louvain
@@ -1508,7 +1510,7 @@ class Graph(GraphBase):
         if objective_function.lower() not in ("cpm", "modularity"):
           raise ValueError("objective_function must be \"CPM\" or \"modularity\".")
 
-        membership = GraphBase.community_leiden(self,
+        membership, quality = GraphBase.community_leiden(self,
           edge_weights=weights, node_weights=node_weights,
           resolution_parameter=resolution_parameter,
           normalize_resolution=(objective_function == "modularity"),
@@ -1519,7 +1521,8 @@ class Graph(GraphBase):
         else:
             modularity_params={}
         return VertexClustering(self, membership,
-                modularity_params=modularity_params)
+                                params=dict(quality=quality),
+                                modularity_params=modularity_params)
 
     def layout(self, layout=None, *args, **kwds):
         """Returns the layout of the graph according to a layout algorithm.
