@@ -1508,7 +1508,7 @@ class Graph(GraphBase):
         if objective_function.lower() not in ("cpm", "modularity"):
           raise ValueError("objective_function must be \"CPM\" or \"modularity\".")
 
-        membership = GraphBase.community_leiden(self,
+        membership, quality = GraphBase.community_leiden(self,
           edge_weights=weights, node_weights=node_weights,
           resolution_parameter=resolution_parameter,
           normalize_resolution=(objective_function == "modularity"),
@@ -1519,7 +1519,8 @@ class Graph(GraphBase):
         else:
             modularity_params={}
         return VertexClustering(self, membership,
-                modularity_params=modularity_params)
+                                params=dict(quality=quality),
+                                modularity_params=modularity_params)
 
     def layout(self, layout=None, *args, **kwds):
         """Returns the layout of the graph according to a layout algorithm.

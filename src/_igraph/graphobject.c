@@ -11750,10 +11750,11 @@ PyObject *igraphmodule_Graph_community_leiden(igraphmodule_GraphObject *self,
     free(membership);
   }
 
-  if (!error)
-  {  return res; }
-  else
-  {  return NULL; }
+  if (!error) {
+    return Py_BuildValue("Nd", res, (double)quality);
+  } else {
+    return NULL;
+  }
 }
 
 /**********************************************************************
